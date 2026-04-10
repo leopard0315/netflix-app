@@ -10,7 +10,7 @@ import { Outlet, Link } from 'react-router-dom';
 const AppLayout = () => {
   return (
     <div>
-    <Navbar expand="lg" bg="dark" data-bs-theme="dark">
+    <Navbar expand="lg" data-bs-theme="dark">
       <Container fluid>
         <Navbar.Brand href="/">
             <img
