@@ -28,7 +28,7 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    padding: 2rea;
+    padding: 2rem;
 }
 
 .banner-text-area h1{
@@ -47,4 +47,33 @@
     font-size: 1.1rem;
     color: #ccc;
     margin-top: 10px;
+}
+
+/* mobile버전 - 화면너비가 768px 이하인 경우 */
+@media screen and (max-width: 768px) {
+    .banner {
+        height: 50vh; 
+    }
+
+    .banner-text-area {
+        width: 90%; 
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .banner-text-area h1 {
+        font-size: 1.2rem; 
+    }
+
+    .banner-text-area p {
+        font-size: 0.9rem; /* 본문 크기 축소 */
+        display: -webkit-box;
+       -webkit-box-orient: vertical; /* 모바일에서는 더 짧게 2줄만 표시 */
+        overflow: hidden; /* 넘치는 글자 숨김*/
+        -webkit-line-clamp: 3;
+    }
+    
+    .release-date {
+        font-size: 0.8rem;
+    }
 }
