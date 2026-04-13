@@ -36,6 +36,40 @@
     z-index: 10;
 }
 
+.movie-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    word-break: keep-all;
+}
+
+.attribute-group {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 6px;        
+    margin-bottom: 10px;
+}
+
+.genre-badge {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+    border-radius: 4px;
+}
+
+.info-badge {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+    font-weight: bold;
+}
+
+.popularity-text {
+    font-size: 0.85rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
 /* 모바일 버전 */
 @media screen and (max-width: 768px) {
     .movie-card {
