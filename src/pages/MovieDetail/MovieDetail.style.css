@@ -32,6 +32,14 @@
     gap: 50px;
 }
 
+.content-poster{
+    position: relative;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .content-poster img {
     width: 350px;
     border-radius: 12px;
@@ -112,6 +120,41 @@
     justify-self: flex-start; 
 }
 
+/* MovieDetail.style.css */
+
+.play-btn {
+    /* 1. 위치 및 정렬: 왼쪽 여백을 자동으로 채워 오른쪽 끝으로 밀어냄 */
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* 아이콘과 글자 사이 간격 */
+
+    /* 2. 크기 및 여백: 내용물에 맞게 너비 조절 */
+    width: fit-content !important;
+    padding: 8px 24px !important; /* 위아래 8px, 좌우 24px */
+    
+    /* 3. 디자인: 흰색 배경에 검은 글자 (이미지 스타일) */
+    background-color: white !important;
+    color: black !important;
+    border: none !important;
+    border-radius: 4px !important; /* 이미지처럼 아주 살짝 둥근 직사각형 */
+    
+    /* 4. 텍스트 스타일 */
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    cursor: pointer;
+    
+    /* 5. 애니메이션 및 기타 */
+    transition: background-color 0.2s ease-in-out;
+    flex-shrink: 0; /* 부모가 좁아져도 버튼 형태 유지 */
+}
+
+/* 마우스를 올렸을 때 넷플릭스처럼 약간 투명해지거나 회색빛이 도는 효과 */
+.play-btn:hover {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: black !important;
+}
+
 .reviews-section {
     max-width: 1400px;
     margin: 50px auto;
@@ -161,6 +204,7 @@
     font-weight: bold;
     color: white;
 }
+
 
 @media screen and (max-width: 1024px) {
     .detail-content-area {

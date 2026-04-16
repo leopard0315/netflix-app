@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react';
 import { useParams } from 'react-router-dom';
 import { useMovieDetailQuery } from '../../hooks/useMovieDetail';
 import { Badge } from 'react-bootstrap';
@@ -6,16 +6,17 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useMovieReviewsQuery } from '../../hooks/useMovieReviews';
 import ReviewCard from './components/ReviewCard';
 import { useRelatedMoviesQuery } from '../../hooks/useRelatedMovies';
-// import MovieSlider from '../../common/MovieSlider/MovieSlider';
-import "./MovieDetail.style.css";
 import RelatedMovieSlide from './components/RelatedMoviesSlide/RelatedMoviesSlide';
-
+import { Button } from 'react-bootstrap';
+import TrailerModal from '../../common/TrailerModal/TrailerModal';
+import "./MovieDetail.style.css";
 
 const MovieDetail = () => {
   const {id} = useParams();
   const {data: reviews,isLoading:isReviewLoading} = useMovieReviewsQuery(id);
   const { data, isLoading, isError, error } = useMovieDetailQuery(id);
   const {data: relatData, isLoading:isRelatLoading} = useRelatedMoviesQuery(id);
+  const [showTrailer, setShowTrailer] = useState(false);
 
    if(isLoading){
         return  <Spinner animation="border" variant="danger" />;
@@ -53,8 +54,17 @@ const MovieDetail = () => {
             <Badge bg="warning" text="dark" className="info-badge">{data.adult ? `18+` : `ALL`}</Badge>
           </div>
 
+          <Button 
+              variant="light" 
+              className="ms-4 play-btn" 
+              onClick={() => setShowTrailer(true)}
+            >
+              ▶ Play
+            </Button>
+
           <hr className="detail-divider"/> 
           <p className="detail-overview">{data.overview}</p>
+          
           <hr className="detail-divider"/>
 
           <div className="detail-specs">
@@ -65,6 +75,12 @@ const MovieDetail = () => {
           </div>
         </div>
       </div>
+
+      <TrailerModal 
+        show={showTrailer} 
+        onHide={() => setShowTrailer(false)} 
+        movieId={id} 
+      />
 
       <div className="reviews-section">
         <h2 className="section-title">Reviews ({reviews?.length})</h2>
@@ -80,21 +96,7 @@ const MovieDetail = () => {
         )}
       </div>
 
-      <RelatedMovieSlide/>
-      
-      {/* <div className="related-section">
-        {isRelatLoading? (
-          <Spinner animation="border" />
-        ) : (
-          relatData && (
-            <MovieSlider 
-              title="Related Movies" 
-              movies={relatData.results} 
-            />
-          )
-        )}
-      </div> */}
-      
+      <RelatedMovieSlide/>      
     </div>
     
   )
