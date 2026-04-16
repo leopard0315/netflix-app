@@ -150,6 +150,18 @@
     text-transform: uppercase; /* 대문자로 MORE/LESS 표시 */
 }
 
+.related-section{
+    padding: 50px 0;
+    background-color: black; 
+}
+
+.related-section .movie-slider-title {
+    margin-left: 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+}
+
 @media screen and (max-width: 1024px) {
     .detail-content-area {
         flex-direction: column;

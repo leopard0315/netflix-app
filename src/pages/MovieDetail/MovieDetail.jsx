@@ -5,12 +5,17 @@ import { Badge } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import { useMovieReviewsQuery } from '../../hooks/useMovieReviews';
 import ReviewCard from './components/ReviewCard';
+import { useRelatedMoviesQuery } from '../../hooks/useRelatedMovies';
+// import MovieSlider from '../../common/MovieSlider/MovieSlider';
 import "./MovieDetail.style.css";
+import RelatedMovieSlide from './components/RelatedMoviesSlide/RelatedMoviesSlide';
+
 
 const MovieDetail = () => {
   const {id} = useParams();
   const {data: reviews,isLoading:isReviewLoading} = useMovieReviewsQuery(id);
   const { data, isLoading, isError, error } = useMovieDetailQuery(id);
+  const {data: relatData, isLoading:isRelatLoading} = useRelatedMoviesQuery(id);
 
    if(isLoading){
         return  <Spinner animation="border" variant="danger" />;
@@ -68,15 +73,28 @@ const MovieDetail = () => {
           <div className="review-list">
             {reviews.map((review) => (
               <ReviewCard key={review.id} className="review-card" review={review}/>
-                // <h5 className="review-author">{review.author}</h5>
-                // <p className="review-content">{review.content}</p>
-                // <span className="review-date">{review.created_at.split('T')[0]}</span>
             ))}
           </div>
         ) : (
           <p className="no-reviews">작성된 리뷰가 없습니다.</p>
         )}
       </div>
+
+      <RelatedMovieSlide/>
+      
+      {/* <div className="related-section">
+        {isRelatLoading? (
+          <Spinner animation="border" />
+        ) : (
+          relatData && (
+            <MovieSlider 
+              title="Related Movies" 
+              movies={relatData.results} 
+            />
+          )
+        )}
+      </div> */}
+      
     </div>
     
   )
