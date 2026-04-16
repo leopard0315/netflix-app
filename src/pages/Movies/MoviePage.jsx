@@ -4,7 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import {Spinner} from 'react-bootstrap';
 import { Container,Row,Col,Alert} from 'react-bootstrap';
 import MovieCard from '../../common/MovieCard/MovieCard';
-import ReactPaginate from 'react-paginate';
+import ReactPaginateModule from 'react-paginate';
+const ReactPaginate = ReactPaginateModule.default || ReactPaginateModule;
 
 // 경로 2가지
 // 1) nav바에서 클릭해서 온경우 -> popular movie 보여주기
@@ -18,11 +19,13 @@ import ReactPaginate from 'react-paginate';
 const MoviePage = () => {
 
   const [query,setQuery] = useSearchParams();
-  const [page,setPage] = useState(0)
+  const [page,setPage] = useState(1);
   const keyword = query.get("q");
 
-  const {data,isLoading,isError,error} = useSearchMovieQuery({keyword});
-  const handlePageClick = ()=>{};
+  const {data,isLoading,isError,error} = useSearchMovieQuery({keyword,page});
+  const handlePageClick = (selected) => {
+    setPage(selected.selected + 1);
+  };
 
   if(isLoading){
         return (
@@ -34,6 +37,8 @@ const MoviePage = () => {
     if(isError){
         return <Alert variant="danger">{error.message}</Alert>
     };
+    console.log("MovieCard:", MovieCard);
+console.log("ReactPaginate:", ReactPaginate);
 
   return (
     <Container>
@@ -41,18 +46,18 @@ const MoviePage = () => {
         <Col lg={4} xs = {12}>필터</Col>
         <Col lg={8} xs = {12}>
         <Row>
-          {data?.results.map((movie,index) =>(
-            <Col key = {index} lg={4} xs = {12}>
+          {data?.results?.map((movie) =>(
+            <Col key = {movie.id} lg={4} xs = {12}>
               <MovieCard movie = {movie}/>
             </Col>
           ))}
         </Row>
-        {/* <ReactPaginate
+        <ReactPaginate
         nextLabel="next >"
         onPageChange={handlePageClick}
         pageRangeDisplayed={3}
         marginPagesDisplayed={2}
-        pageCount={page}
+        pageCount={data?.total_pages || 0}
         previousLabel="< previous"
         pageClassName="page-item"
         pageLinkClassName="page-link"
@@ -66,7 +71,8 @@ const MoviePage = () => {
         containerClassName="pagination"
         activeClassName="active"
         renderOnZeroPageCount={null}
-      /> */}
+        forcePage={page-1}
+      />
           
         </Col>
       </Row>
