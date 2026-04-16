@@ -112,6 +112,44 @@
     justify-self: flex-start; 
 }
 
+.reviews-section {
+    max-width: 1400px;
+    margin: 50px auto;
+    padding: 0 50px;
+}
+
+.review-card {
+    background-color: #1a1a1a;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.review-author {
+    color: #E50914; /* 넷플릭스 레드 포인트 */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.review-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ddd;
+    margin-bottom: 15px; /* 버튼과 간격 확보 */
+}
+.review-date {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #666;
+}
+.review-toggle-btn {
+    border-radius: 20px; /* 버튼을 둥글게 */
+    padding: 4px 15px;
+    font-weight: bold;
+    text-transform: uppercase; /* 대문자로 MORE/LESS 표시 */
+}
+
 @media screen and (max-width: 1024px) {
     .detail-content-area {
         flex-direction: column;

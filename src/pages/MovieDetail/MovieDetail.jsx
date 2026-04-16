@@ -3,10 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useMovieDetailQuery } from '../../hooks/useMovieDetail';
 import { Badge } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import { useMovieReviewsQuery } from '../../hooks/useMovieReviews';
+import ReviewCard from './components/ReviewCard';
 import "./MovieDetail.style.css";
 
 const MovieDetail = () => {
   const {id} = useParams();
+  const {data: reviews,isLoading:isReviewLoading} = useMovieReviewsQuery(id);
   const { data, isLoading, isError, error } = useMovieDetailQuery(id);
 
    if(isLoading){
@@ -58,8 +61,21 @@ const MovieDetail = () => {
         </div>
       </div>
 
-      <div>
-
+      <div className="reviews-section">
+        <h2 className="section-title">Reviews ({reviews?.length})</h2>
+        {isReviewLoading ? 
+        (<Spinner animation="border" />) : reviews?.length > 0 ? (
+          <div className="review-list">
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} className="review-card" review={review}/>
+                // <h5 className="review-author">{review.author}</h5>
+                // <p className="review-content">{review.content}</p>
+                // <span className="review-date">{review.created_at.split('T')[0]}</span>
+            ))}
+          </div>
+        ) : (
+          <p className="no-reviews">작성된 리뷰가 없습니다.</p>
+        )}
       </div>
     </div>
     
