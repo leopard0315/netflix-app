@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import {Spinner} from 'react-bootstrap';
 import { Container,Row,Col,Alert} from 'react-bootstrap';
 import MovieCard from '../../common/MovieCard/MovieCard';
+import "./MoviePage.style.css";
 import ReactPaginateModule from 'react-paginate';
 const ReactPaginate = ReactPaginateModule.default || ReactPaginateModule;
 
@@ -20,9 +21,11 @@ const MoviePage = () => {
 
   const [query,setQuery] = useSearchParams();
   const [page,setPage] = useState(1);
+
   const keyword = query.get("q");
 
   const {data,isLoading,isError,error} = useSearchMovieQuery({keyword,page});
+  
   const handlePageClick = (selected) => {
     setPage(selected.selected + 1);
   };
@@ -38,7 +41,7 @@ const MoviePage = () => {
         return <Alert variant="danger">{error.message}</Alert>
     };
     console.log("MovieCard:", MovieCard);
-console.log("ReactPaginate:", ReactPaginate);
+    console.log("ReactPaginate:", ReactPaginate);
 
   return (
     <Container>
@@ -71,7 +74,7 @@ console.log("ReactPaginate:", ReactPaginate);
         containerClassName="pagination"
         activeClassName="active"
         renderOnZeroPageCount={null}
-        forcePage={page-1}
+        forcePage={page - 1}
       />
           
         </Col>

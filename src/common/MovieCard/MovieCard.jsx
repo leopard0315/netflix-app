@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from 'react-bootstrap';
 import "./MovieCard.style.css"
 import { useMovieGenreQuery } from '../../hooks/useMovieGenre';
 
 const MovieCard = ({movie}) => {
 
-  const {data:genreData} = useMovieGenreQuery()
-
+  const {data:genreData} = useMovieGenreQuery();
   const showGenre=(genreIdList)=>{
     if(!genreData) return []
     const genreNameList = genreIdList.map((id)=>{
@@ -15,9 +15,18 @@ const MovieCard = ({movie}) => {
     })
     return genreNameList;
   }
+
+  const navigate = useNavigate();
+  const goToMovieDetail = () =>{
+    navigate(`/movies/${movie.id}`);
+  }
+
+  
   
   return (
-    <div style={{backgroundImage : 
+    <div 
+    onClick={goToMovieDetail}
+    style={{backgroundImage : 
     `url(https://media.themoviedb.org/t/p/w600_and_h900_face${movie.poster_path})`,
     }}
     className="movie-card"
