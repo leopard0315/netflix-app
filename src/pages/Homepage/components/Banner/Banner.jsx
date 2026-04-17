@@ -1,11 +1,13 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { usePopularMoviesQuery } from '../../../../hooks/usePopularMovies';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import TrailerModal from '../../../../common/TrailerModal/TrailerModal';
 import "./Banner.style.css";
 
 const Banner = () => {
   const {data,isLoading,isError,error} = usePopularMoviesQuery();
+  const [showTrailer,setShowTrailer] = useState(false);
 
   // 로딩 중일때 + 로딩스피너
   if (isLoading){
@@ -38,11 +40,20 @@ const Banner = () => {
         <p className="release-date">Release Date : {movie.release_date}</p>
 
         <div className="banner-button-group">
-          <button className="banner-btn play-btn">
-            ▶ 재생
+          <button 
+          className="banner-btn play-btn"
+          onClick={()=>setShowTrailer(true)}
+          >
+            ▶ Play
           </button>
+
+          <TrailerModal 
+        show={showTrailer} 
+        onHide={() => setShowTrailer(false)} 
+        movieId={movie.id} 
+      />
           <button className="banner-btn info-btn">
-            ⓘ 상세 정보
+            ⓘ Info
           </button>
         </div>
         
