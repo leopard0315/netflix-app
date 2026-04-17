@@ -3,11 +3,13 @@ import { usePopularMoviesQuery } from '../../../../hooks/usePopularMovies';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import TrailerModal from '../../../../common/TrailerModal/TrailerModal';
+import { useNavigate } from 'react-router-dom';
 import "./Banner.style.css";
 
 const Banner = () => {
   const {data,isLoading,isError,error} = usePopularMoviesQuery();
   const [showTrailer,setShowTrailer] = useState(false);
+  const navigate = useNavigate();
 
   // 로딩 중일때 + 로딩스피너
   if (isLoading){
@@ -25,6 +27,10 @@ const Banner = () => {
   const movie = data?.results?.[0];
   if (!movie) {
     return null;
+  }
+  // 상세정보 클릭시 이동함수
+  const goToMovieDetail = () =>{
+    navigate(`/movies/${movie.id}`);
   }
 
   return (
@@ -46,18 +52,19 @@ const Banner = () => {
           >
             ▶ Play
           </button>
+          <button 
+          className="banner-btn info-btn"
+          onClick={goToMovieDetail}>
+            ⓘ Info
+          </button>
+        </div>
+      </div>
 
-          <TrailerModal 
+      <TrailerModal 
         show={showTrailer} 
         onHide={() => setShowTrailer(false)} 
         movieId={movie.id} 
       />
-          <button className="banner-btn info-btn">
-            ⓘ Info
-          </button>
-        </div>
-        
-      </div>
     </div>
   );
 };
