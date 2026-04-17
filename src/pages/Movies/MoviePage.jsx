@@ -2,27 +2,28 @@ import React, { useState,useEffect } from 'react'
 import { useSearchMovieQuery}  from '../../hooks/useSearchMovie';
 import { useSearchParams } from 'react-router-dom';
 import {Spinner} from 'react-bootstrap';
-import { Container,Row,Col,Alert} from 'react-bootstrap';
+import { Container,Row,Col,Alert,Dropdown,DropdownButton} from 'react-bootstrap';
 import MovieCard from '../../common/MovieCard/MovieCard';
+import { useMovieGenreQuery } from '../../hooks/useMovieGenre';
 import "./MoviePage.style.css";
 import ReactPaginateModule from 'react-paginate';
 const ReactPaginate = ReactPaginateModule.default || ReactPaginateModule;
 
-// 경로 2가지
-// 1) nav바에서 클릭해서 온경우 -> popular movie 보여주기
-// 2) keyword를 입력해서 온 경우 -> keyword와 관련된 영화들을 보여줌
-
-// pagination
-// 1) 설치
-// 2) page state 만들기
-// 3) pagination 클릭할때마다 page 바꿔주기
-// 4) page값이 바뀔때마다 useSearchMovie에 page까지 넣어서 fetch
 const MoviePage = () => {
-
   const [query,setQuery] = useSearchParams();
   const [page,setPage] = useState(1);
   const [pageRange, setPageRange] = useState(window.innerWidth <= 768 ? 3 : 5);
 
+  const [sortOrder, setSortOrder] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const {data: genreData} = useMovieGenreQuery();
+
+  const getGenreTitle = () => {
+    if (!selectedGenre) return "Genre"; 
+  
+    const genre = genreData?.find(g => g.id === selectedGenre);
+    return genre ? genre.name : "Genre";
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,9 +38,30 @@ const MoviePage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  
+
   const keyword = query.get("q");
   const {data,isLoading,isError,error} = useSearchMovieQuery({keyword,page});
   
+const getFilteredList = () => {
+    if (!data?.results) return [];
+
+    let list = [...data.results];
+
+    if (selectedGenre) {
+      list = list.filter((movie) => movie.genre_ids.includes(selectedGenre));
+    }
+
+    if (sortOrder === "desc") {
+      list.sort((a, b) => b.popularity - a.popularity); 
+    } else if (sortOrder === "asc") {
+      list.sort((a, b) => a.popularity - b.popularity); 
+    }
+    return list;
+  };
+
+  const filteredList = getFilteredList();
+
   const handlePageClick = (selected) => {
     setPage(selected.selected + 1);
     window.scrollTo(0, 0);
@@ -63,10 +85,37 @@ const MoviePage = () => {
   return (
     <Container>
       <Row>
-        <Col lg={4} xs = {12}>필터</Col>
+        <Col lg={3} xs={12} className="filter-area mb-4">
+          <h4 className="text-white mb-3">Filter</h4>
+          <DropdownButton 
+            title={sortOrder === "desc" ? "Popularity (High)" : sortOrder === "asc" ? "Popularity (Low)" : "Popularity"} 
+            variant="outline-danger" 
+            className="mb-3 w-100"
+            onSelect={(e) => setSortOrder(e)}
+          >
+            <Dropdown.Item eventKey="desc">High</Dropdown.Item>
+            <Dropdown.Item eventKey="asc">Low</Dropdown.Item>
+          </DropdownButton>
+
+          <DropdownButton 
+            title={getGenreTitle()} 
+            variant="outline-light" 
+            className="w-100"
+            onSelect={(e) => setSelectedGenre(e ? Number(e) : null)}
+          >
+          <Dropdown.Item eventKey="">All Genres</Dropdown.Item>
+          {genreData?.map((genre) => (
+              <Dropdown.Item key={genre.id} eventKey={genre.id}>
+                {genre.name}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
+        </Col>
+
+
         <Col lg={8} xs = {12}>
         <Row>
-          {data?.results?.map((movie) =>(
+          {filteredList.map((movie) =>(
             <Col key = {movie.id} lg={4} xs = {12}>
               <MovieCard movie = {movie}/>
             </Col>
