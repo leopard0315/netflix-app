@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 const ReviewCard = ({ review }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const limit = 300;
+  const limit = 100;
   const isLongText = review.content.length > limit;
   const displayContent = isExpanded ? review.content : review.content.slice(0, limit) + (isLongText ? "..." : "");
 

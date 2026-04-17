@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useSearchMovieQuery}  from '../../hooks/useSearchMovie';
 import { useSearchParams } from 'react-router-dom';
 import {Spinner} from 'react-bootstrap';
@@ -21,13 +21,28 @@ const MoviePage = () => {
 
   const [query,setQuery] = useSearchParams();
   const [page,setPage] = useState(1);
+  const [pageRange, setPageRange] = useState(window.innerWidth <= 768 ? 3 : 5);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setPageRange(3);
+      } else {
+        setPageRange(5); 
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize(); 
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const keyword = query.get("q");
-
   const {data,isLoading,isError,error} = useSearchMovieQuery({keyword,page});
   
   const handlePageClick = (selected) => {
     setPage(selected.selected + 1);
+    window.scrollTo(0, 0);
   };
 
   if(isLoading){
@@ -43,6 +58,8 @@ const MoviePage = () => {
     console.log("MovieCard:", MovieCard);
     console.log("ReactPaginate:", ReactPaginate);
 
+    
+
   return (
     <Container>
       <Row>
@@ -56,12 +73,12 @@ const MoviePage = () => {
           ))}
         </Row>
         <ReactPaginate
-        nextLabel="next >"
+        nextLabel=">"
         onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
-        pageCount={data?.total_pages || 0}
-        previousLabel="< previous"
+        pageRangeDisplayed={pageRange}
+        marginPagesDisplayed={window.innerWidth <= 768 ? 1 : 2}
+        pageCount={data?.total_pages > 500 ? 500 : data?.total_pages || 0}
+        previousLabel="<"
         pageClassName="page-item"
         pageLinkClassName="page-link"
         previousClassName="page-item"
@@ -71,7 +88,7 @@ const MoviePage = () => {
         breakLabel="..."
         breakClassName="page-item"
         breakLinkClassName="page-link"
-        containerClassName="pagination"
+        containerClassName="pagination justify-content-center mt-5"
         activeClassName="active"
         renderOnZeroPageCount={null}
         forcePage={page - 1}

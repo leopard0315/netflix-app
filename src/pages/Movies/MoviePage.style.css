@@ -1,5 +1,7 @@
 .pagination {
   gap: 4px;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 .pagination .page-item .page-link {
@@ -8,6 +10,8 @@
   color: #fff;
   min-width: 36px;
   text-align: center;
+  padding: 8px 12px;
+  transition: all 0.2s;
 }
 
 .pagination .page-item .page-link:hover {
@@ -26,4 +30,24 @@
   background-color: #141414;
   border-color: #222;
   color: #555;
+}
+
+@media screen and (max-width: 768px) {
+  .pagination {
+    gap: 2px;
+  }
+
+  .pagination .page-item .page-link {
+    min-width: 28px; 
+    padding: 6px 8px;
+    font-size: 0.8rem; 
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pagination .page-item .page-link {
+    min-width: 24px;
+    padding: 4px 6px;
+    font-size: 0.75rem;
+  }
 }
